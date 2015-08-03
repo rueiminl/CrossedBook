@@ -9,6 +9,8 @@ public:
     virtual void AddOrder(int timestamp, std::string symbol, char side, int size, double price, int order_id);
     virtual void ModifyOrder(int timestamp, int order_id, int size, double price);
 private:
+    std::shared_ptr<Order> GetOrder(int order_id);
+    std::shared_ptr<Book> GetBook(std::string symbol);
     std::unordered_map<int, std::shared_ptr<Order> > m_orderIndex;
     std::unordered_map<std::string, std::shared_ptr<Book> > m_bookIndex;
 };
