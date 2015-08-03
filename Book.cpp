@@ -18,12 +18,34 @@ void Book::AddOrder(int timestamp, shared_ptr<Order> order) {
     } else {
         m_bids.insert(make_pair(price, order));
     }
-    cout << *this << endl;
+    if (m_status == "normal" && !m_asks.empty() && !m_bids.empty()) {
+        auto best_bid = m_bids.begin()->first;
+        auto best_ask = m_asks.begin()->first;
+        if (best_ask == best_bid) {
+            Lock(timestamp, best_bid, best_ask);
+        } else if (best_ask < best_bid) {
+            Cross(timestamp, best_bid, best_ask);
+        }
+    }
 }
 
 void Book::ModifyOrder(int timestamp, std::shared_ptr<Order> order, int size, double price) {
     order->SetValue(size, price);
     cout << "Book::ModifyOrder:" << timestamp << " " << *order << " " << size << " " << price << endl;
+}
+
+void Book::Output(int timestamp, double best_bid, double best_ask) {
+    cout << timestamp << " " << m_symbol << " " << m_status << " " << best_bid << " " << best_ask << endl;
+}
+
+void Book::Lock(int timestamp, double best_bid, double best_ask) {
+    m_status = "locked";
+    Output(timestamp, best_bid, best_ask);
+}
+
+void Book::Cross(int timestamp, double best_bid, double best_ask) {
+    m_status = "crossed";
+    Output(timestamp, best_bid, best_ask);
 }
 
 std::string Book::str() const {
