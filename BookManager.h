@@ -1,0 +1,14 @@
+#pragma once
+#include "IBookManager.h"
+#include <unordered_map>
+class Order;
+class Book;
+class BookManager : public IBookManager {
+public:
+    BookManager();
+    virtual void AddOrder(int timestamp, std::string symbol, char side, int size, double price, int order_id);
+    virtual void ModifyOrder(int timestamp, int order_id, int size, double price);
+private:
+    std::unordered_map<int, std::shared_ptr<Order> > m_orderIndex;
+    std::unordered_map<std::string, std::shared_ptr<Book> > m_bookIndex;
+};
