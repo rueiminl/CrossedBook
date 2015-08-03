@@ -11,6 +11,7 @@ public:
 private:
     std::shared_ptr<Order> GetOrder(int order_id);
     std::shared_ptr<Book> GetBook(std::string symbol);
+    std::shared_ptr<Book> GetBook(int order_id);
     std::unordered_map<int, std::shared_ptr<Order> > m_orderIndex;
     std::unordered_map<std::string, std::shared_ptr<Book> > m_bookIndex;
 };

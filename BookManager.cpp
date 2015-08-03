@@ -8,13 +8,16 @@ BookManager::BookManager()
 {}
 
 void BookManager::AddOrder(int timestamp, string symbol, char side, int size, double price, int order_id) {
+    auto book = GetBook(symbol);
     auto order = GetOrder(order_id);
     order->SetSide(side);
     order->SetValue(size, price);
-    GetBook(symbol)->AddOrder(timestamp, order);
+    book->AddOrder(timestamp, order);
 }
 void BookManager::ModifyOrder(int timestamp, int order_id, int size, double price) {
-    cout << "ModifyOrder:" << timestamp << " " << order_id << " " << size << " " << price << endl;
+    auto book = GetBook(order_id);
+    auto order = GetOrder(order_id);
+    book->ModifyOrder(timestamp, order, size, price);
 }
 
 std::shared_ptr<Order> BookManager::GetOrder(int order_id) {
@@ -30,3 +33,8 @@ std::shared_ptr<Book> BookManager::GetBook(string symbol) {
     }
     return m_bookIndex[symbol];
 }
+
+std::shared_ptr<Book> BookManager::GetBook(int order_id) {
+    return GetOrder(order_id)->GetBook();
+}
+

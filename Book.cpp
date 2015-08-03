@@ -9,10 +9,10 @@ Book::Book(string symbol)
 }
 
 void Book::AddOrder(int timestamp, shared_ptr<Order> order) {
-    cout << "Book::AddOrder:" << timestamp << " " << order->side << " " << order->size << " " << order->price << " " << order->id << endl;
-}
+    order->SetBook(shared_from_this());
+    cout << "Book::AddOrder:" << timestamp << " " << *order << endl;
 }
 
-void Book::ModifyOrder(int timestamp, int order_id,  int size, double price) {
-    cout << "Book::ModifyOrder:" << timestamp << " " << order_id << " " << size << " " << price << endl;
+void Book::ModifyOrder(int timestamp, std::shared_ptr<Order> order, int size, double price) {
+    cout << "Book::ModifyOrder:" << timestamp << " " << *order << " " << size << " " << price << endl;
 }
