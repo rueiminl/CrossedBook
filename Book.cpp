@@ -46,9 +46,11 @@ void Book::CheckStatus(int timestamp) {
             Normal(timestamp);
         } else if (best_ask < best_bid) {
             Cross(timestamp, best_bid, best_ask);
-        } else {
+        } else { // best_ask == best_bid
             Lock(timestamp, best_bid, best_ask);
         }
+    } else {
+        Normal(timestamp);
     }
 }
 
