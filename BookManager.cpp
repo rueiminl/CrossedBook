@@ -7,7 +7,7 @@ using namespace std;
 BookManager::BookManager()
 {}
 
-void BookManager::AddOrder(int timestamp, string symbol, char side, int size, double price, int order_id) {
+void BookManager::AddOrder(int timestamp, char side, string symbol, int size, double price, int order_id) {
     auto book = GetBook(symbol);
     auto order = GetOrder(order_id);
     order->SetSide(side);

@@ -6,7 +6,7 @@ class Book;
 class BookManager : public IBookManager {
 public:
     BookManager();
-    virtual void AddOrder(int timestamp, std::string symbol, char side, int size, double price, int order_id);
+    virtual void AddOrder(int timestamp, char side, std::string symbol, int size, double price, int order_id);
     virtual void ModifyOrder(int timestamp, int order_id, int size, double price);
 private:
     std::shared_ptr<Order> GetOrder(int order_id);

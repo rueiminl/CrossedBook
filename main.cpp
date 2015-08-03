@@ -14,8 +14,8 @@ int main(int argc, char* argv[]) {
         double price;
         cin >> timestamp >> type;
         if (type == "A") {
-            cin >> symbol >> side >> size >> price >> order_id;
-            manager->AddOrder(timestamp, symbol, side[0], size, price, order_id);
+            cin >> side >> symbol >> size >> price >> order_id;
+            manager->AddOrder(timestamp, side[0], symbol, size, price, order_id);
         } else {
             cin >> order_id >> size >> price;
             manager->ModifyOrder(timestamp, order_id, size, price);
