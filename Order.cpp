@@ -19,6 +19,9 @@ void Order::SetBook(std::shared_ptr<Book> book) {
     m_book = book;
 }
 
+int Order::GetID() const {
+    return m_id;
+}
 
 char Order::GetSide() const {
     return m_side;

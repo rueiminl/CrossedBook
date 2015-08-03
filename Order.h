@@ -9,6 +9,7 @@ public:
     void SetSide(char side);
     void SetValue(int size, double price);
     void SetBook(std::shared_ptr<Book> book);
+    int GetID() const;
     char GetSide() const;
     double GetPrice() const;
     std::shared_ptr<Book> GetBook() const;
