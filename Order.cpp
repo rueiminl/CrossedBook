@@ -34,19 +34,3 @@ double Order::GetPrice() const {
 std::shared_ptr<Book> Order::GetBook() const {
     return m_book;
 }
-
-string Order::str() const {
-    string s;
-    s += to_string(m_id);
-    s.push_back(' ');
-    s.push_back(m_side);
-    s.push_back(' ');
-    s += to_string(m_size);
-    s.push_back(' ');
-    s += to_string(m_price);
-    return s;
-}
-
-std::ostream &operator<<(std::ostream &os, Order const &order) {
-    return os << order.str();
-}

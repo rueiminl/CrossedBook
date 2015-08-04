@@ -2,6 +2,7 @@
 #include "Order.h"
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 using namespace std;
 
 Book::Book(string symbol)
@@ -55,12 +56,13 @@ void Book::CheckStatus(int timestamp) {
 }
 
 void Book::Output(int timestamp, double best_bid, double best_ask) {
-    cout << timestamp << " " << m_symbol << " " << m_status << " " << best_bid << " " << best_ask << endl;
+    cout << timestamp << " " << m_symbol << " " << m_status << " ";
+    cout.setf(ios::fixed);
+    cout << setprecision(4) << best_bid << " " << best_ask << endl;
 }
 void Book::Output(int timestamp) {
     cout << timestamp << " " << m_symbol << " " << m_status << endl;
 }
-
 
 void Book::Normal(int timestamp) {
     if (m_status != "normal") {
@@ -81,19 +83,3 @@ void Book::Cross(int timestamp, double best_bid, double best_ask) {
         Output(timestamp, best_bid, best_ask);
     }
 }
-
-std::string Book::str() const {
-    stringstream ss;
-    for (auto ask : m_asks) {
-        ss << *ask.second << endl;
-    }
-    for (auto bid : m_bids) {
-        ss << *bid.second << endl;
-    }
-    return ss.str();
-}
-
-std::ostream &operator<<(std::ostream &os, Book const &book) {
-    return os << book.str();
-}
-

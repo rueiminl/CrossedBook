@@ -13,7 +13,6 @@ public:
     char GetSide() const;
     double GetPrice() const;
     std::shared_ptr<Book> GetBook() const;
-    std::string str() const;
 private:
     int m_id;
     char m_side;
@@ -21,5 +20,3 @@ private:
     double m_price;
     std::shared_ptr<Book> m_book;
 };
-
-std::ostream &operator<<(std::ostream &os, Order const &order);
