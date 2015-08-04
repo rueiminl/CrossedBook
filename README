@@ -22,3 +22,6 @@ Another Possible Solution:
 
     Use priority_queue (heap) so that insertion could be O(1) in average, and getMax/Min could be O(1), and use timestamp to check if the Max/Min is valid or not. In this case, modification could be O(1) in usual case but in O(N) in worst case. Moreover, this solution would take more space since I didn't remove invalid value immediately.
 
+Note:
+
+    I didn't check the validation of input. For example, all the case of timestamp not a number, duplicated order_id, unordered timestamp, invalid side (must 'A' or 'B') or type (must 'A' or 'M'), invalid price or size ...etc could cause problems.

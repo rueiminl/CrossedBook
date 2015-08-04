@@ -8,7 +8,8 @@ Order::Order(int id)
 void Order::SetSide(char side) {
     m_side = side;
 }
-void Order::SetValue(int size, double price) {
+void Order::SetValue(int timestamp, int size, double price) {
+    m_timestamp = timestamp;
     m_size = size;
     m_price = price;
 }
@@ -23,6 +24,10 @@ int Order::GetID() const {
 
 char Order::GetSide() const {
     return m_side;
+}
+
+int Order::GetTimestamp() const {
+    return m_timestamp;
 }
 
 double Order::GetPrice() const {

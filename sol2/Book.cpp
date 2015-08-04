@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <limits>
 using namespace std;
 
 Book::Book(string symbol)
@@ -11,47 +12,69 @@ Book::Book(string symbol)
 {
 }
 
-void Book::AddOrder(int timestamp, shared_ptr<Order> order) {
+void Book::AddOrder(shared_ptr<Order> order) {
     order->SetBook(shared_from_this());
     double price = order->GetPrice();
     int id = order->GetID();
+    m_orderIndex[id] = order;
+    int timestamp = order->GetTimestamp();
     if (order->GetSide() == 'A') {
-        m_asks.insert(make_pair(make_pair(price, id), order));
+        m_asks.push(make_pair(price, make_pair(id, timestamp)));
     } else {
-        m_bids.insert(make_pair(make_pair(price, id), order));
+        m_bids.push(make_pair(price, make_pair(id, timestamp)));
     }
     CheckStatus(timestamp);
 }
 
-void Book::ModifyOrder(int timestamp, std::shared_ptr<Order> order, int size, double price) {
+void Book::ModifyOrder(std::shared_ptr<Order> order, int timestamp, int size, double price) {
     int id = order->GetID();
     double oldPrice = order->GetPrice();
-    order->SetValue(size, price);
-    if (order->GetSide() == 'A') {
-        m_asks.erase(make_pair(oldPrice, id));
+    order->SetValue(timestamp, size, price);
+    if (order->GetSide() == 'A') { // ask
         if (size)
-            m_asks.insert(make_pair(make_pair(price, id), order));
-    } else {
-        m_bids.erase(make_pair(oldPrice, id));
+            m_asks.push(make_pair(price, make_pair(id, timestamp)));
+    } else { // bid
         if (size)
-            m_bids.insert(make_pair(make_pair(price, id), order));
+            m_bids.push(make_pair(price, make_pair(id, timestamp)));
     }
     CheckStatus(timestamp);
+}
+
+double Book::GetBestBid() {
+    while (!m_bids.empty()) {
+        auto top = m_bids.top();
+        auto id = top.second.first;
+        auto timestamp = top.second.second;
+        if (GetOrder(id)->GetTimestamp() == timestamp)
+            return top.first;
+        // else the top is invalid
+        m_bids.pop();
+    }
+    return std::numeric_limits<double>::min();
+}
+
+double Book::GetBestAsk() {
+    while (!m_asks.empty()) {
+        auto top = m_asks.top();
+        auto id = top.second.first;
+        auto timestamp = top.second.second;
+        if (GetOrder(id)->GetTimestamp() == timestamp)
+            return top.first;
+        // else the top is invalid
+        m_asks.pop();
+    }
+    return std::numeric_limits<double>::max();
 }
 
 void Book::CheckStatus(int timestamp) {
-    if (!m_asks.empty() && !m_bids.empty()) {
-        auto best_bid = m_bids.begin()->first.first;
-        auto best_ask = m_asks.begin()->first.first;
-        if (best_ask > best_bid) {
-            Normal(timestamp);
-        } else if (best_ask < best_bid) {
-            Cross(timestamp, best_bid, best_ask);
-        } else { // best_ask == best_bid
-            Lock(timestamp, best_bid, best_ask);
-        }
-    } else {
+    auto best_bid = GetBestBid();
+    auto best_ask = GetBestAsk();
+    if (best_ask > best_bid) {
         Normal(timestamp);
+    } else if (best_ask < best_bid) {
+        Cross(timestamp, best_bid, best_ask);
+    } else { // best_ask == best_bid
+        Lock(timestamp, best_bid, best_ask);
     }
 }
 
@@ -60,6 +83,7 @@ void Book::Output(int timestamp, double best_bid, double best_ask) {
     cout.setf(ios::fixed);
     cout << setprecision(4) << best_bid << " " << best_ask << endl;
 }
+
 void Book::Output(int timestamp) {
     cout << timestamp << " " << m_symbol << " " << m_status << endl;
 }
@@ -83,3 +107,8 @@ void Book::Cross(int timestamp, double best_bid, double best_ask) {
         Output(timestamp, best_bid, best_ask);
     }
 }
+
+shared_ptr<Order> Book::GetOrder(int order_id) {
+    return m_orderIndex[order_id];
+}
+

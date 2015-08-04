@@ -11,13 +11,13 @@ void BookManager::AddOrder(int timestamp, char side, string symbol, int size, do
     auto book = GetBook(symbol);
     auto order = GetOrder(order_id);
     order->SetSide(side);
-    order->SetValue(size, price);
-    book->AddOrder(timestamp, order);
+    order->SetValue(timestamp, size, price);
+    book->AddOrder(order);
 }
 void BookManager::ModifyOrder(int timestamp, int order_id, int size, double price) {
     auto book = GetBook(order_id);
     auto order = GetOrder(order_id);
-    book->ModifyOrder(timestamp, order, size, price);
+    book->ModifyOrder(order, timestamp, size, price);
 }
 
 std::shared_ptr<Order> BookManager::GetOrder(int order_id) {

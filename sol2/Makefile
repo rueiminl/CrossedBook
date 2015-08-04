@@ -7,5 +7,5 @@ cross: $(OBJ)
 .o: .cpp
 
 clean:
-	rm $(OBJ)
+	rm $(OBJ) cross
 

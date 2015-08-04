@@ -83,3 +83,4 @@ void Book::Cross(int timestamp, double best_bid, double best_ask) {
         Output(timestamp, best_bid, best_ask);
     }
 }
+
