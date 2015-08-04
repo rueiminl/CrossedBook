@@ -28,7 +28,6 @@ void Book::AddOrder(shared_ptr<Order> order) {
 
 void Book::ModifyOrder(std::shared_ptr<Order> order, int timestamp, int size, double price) {
     int id = order->GetID();
-    double oldPrice = order->GetPrice();
     order->SetValue(timestamp, size, price);
     if (order->GetSide() == 'A') { // ask
         if (size)
