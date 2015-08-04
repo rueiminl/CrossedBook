@@ -1,0 +1,24 @@
+Usage:
+
+    make
+    ./cross < sample.input
+
+Approach to the problem:
+
+    Since the main operation would be getMax()/getMin() (i.e. top()), my first attempt solution is to use heap since its outstanding performance on insertion (O(1)) and top (O(1)). However, the problem also needs to support modification, which significantly decreases the performance of heap (O(N)), so I decide to use the most straightforward data structure: binary search tree (BST). BST could support insertion in O(logN), modification (a deletion and an insertion) in O(logN), and getMax/Min in O(1).
+
+    In addition, in order to access quickly, I use hash table to access Book by symbol and Order by order_id in constant time (O(1)).
+
+Data Structure:
+
+    In C++, the STL map is implemented by BST, so I use map to store the sorted ask and bid list. Since prices in different Order might have the same value, I use order_id (which should be unique) as the partial key to make sure the uniqueness.
+
+Expected Time Complexity For Each Input:
+
+    For AddOrder, it's O(logN) because the order is inserted into a BST.
+    For ModifyOrder, it's O(logN) because the order is deleted from a BST first, then it's inserted into a BST afterwards.
+
+Another Possible Solution:
+
+    Use priority_queue (heap) so that insertion could be O(1) in average, and getMax/Min could be O(1), and use timestamp to check if the Max/Min is valid or not. In this case, modification could be O(1) in usual case but in O(N) in worst case. Moreover, this solution would take more space since I didn't remove invalid value immediately.
+
